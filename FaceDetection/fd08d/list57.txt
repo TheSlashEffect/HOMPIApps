@@ -1,0 +1,2 @@
+../pgms/class57.pgm
+../pgms/f4.pgm

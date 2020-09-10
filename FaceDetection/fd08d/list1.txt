@@ -1,0 +1,4 @@
+../pgms/f4.pgm
+../pgms/f4.pgm
+../pgms/f4.pgm
+../pgms/f4.pgm

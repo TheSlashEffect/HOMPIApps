@@ -1,0 +1,61 @@
+# general options
+PAR = yes
+#CC = ompicc
+#CC = omcc
+CC = icc
+#CC = gcc42
+
+ifeq ($(PAR), yes)
+DEBUG = -O3 # -fopenmp -I/tmp/local/include -O3 
+#DEBUG = -O3 -tpp7 -Ob2 -axW # -openmp # -parallel -openmp # -pg # -fprofile-arcs # -O3 -Wall -g
+# -keep #-w -g
+ALLFLAGS = $(DEBUG) -DOPENMP -openmp ## -Kc++ #  -cxxlib-icc # -fast -tpp7 -parallel -Ob2 -axW # -axP -march=pentium4 
+else
+#CC = g++
+DEBUG = -O3 -tpp7 -Ob2 -axW  # -pg # -fprofile-arcs # -O3 -Wall -g
+#DEBUG = -D_XOPEN_SOURCE=600 -O3 -finline-functions #  -fomit-frame-pointer -finline-functions -ffast-math #  # -m64 #  # -O3 #  -pg # -fprofile-arcs # -O3 -Wall -g
+ALLFLAGS = $(DEBUG) 
+endif
+
+.SUFFIXES:
+.SUFFIXES: .c $(SUFFIXES)
+LIBRARIES = -lm
+
+
+SRCS =	Convolver.c FastConv.c FeatureMap.c NN.c lolac.c mem.c ConvolverFine.c \
+	FastConvUtils.c MemUtils.c Neuron.c main.c tanh_lup.c LpiImage.c
+OBJS =	Convolver.o FastConv.o FeatureMap.o NN.o lolac.o mem.o ConvolverFine.o \
+	FastConvUtils.o MemUtils.o Neuron.o main.o tanh_lup.o LpiImage.o
+HDRS =	Convolver.h ConvolverFine.h FastConv.h FastConvUtils.h FeatureMap.h LpiImage.h \
+	MemUtils.h NN.h Neuron.h mem.h memDecl.h memValues.h memValuesOld.h tanh_lup.h	Makefile
+
+TARGET = lolac
+REMOVE = rm -f
+
+all:	$(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(ALLFLAGS)  -o $(TARGET) $(OBJS) -lm
+
+clean:
+	$(REMOVE) *.o $(TARGET)
+	$(REMOVE) *.il *.da gmon.out core*
+
+.c.o:
+	$(CC) $(ALLFLAGS) -c $<
+
+
+Convolver.o: Convolver.c $(HDRS)
+FastConv.o: FastConv.c $(HDRS)
+FeatureMap.o: FeatureMap.c $(HDRS)
+NN.o: NN.c $(HDRS)
+lolac.o: lolac.c $(HDRS)
+mem.o: mem.c $(HDRS)
+ConvolverFine.o: ConvolverFine.c $(HDRS)
+FastConvUtils.o: FastConvUtils.c $(HDRS)
+MemUtils.o: MemUtils.c $(HDRS)
+Neuron.o: Neuron.c $(HDRS)
+main.o: main.c $(HDRS)
+tanh_lup.o: tanh_lup.c $(HDRS)
+LpiImage.o: LpiImage.c $(HDRS)
+
